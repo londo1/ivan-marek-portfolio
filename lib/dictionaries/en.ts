@@ -13,7 +13,12 @@ const en: Dictionary = {
     "/about": "About",
     "/contact": "Contact",
   },
-  header: { role: "Photographer", name: "Ivan Hristov" },
+  header: {
+    role: "Photographer",
+    name: "Ivan Hristov",
+    menuOpen: "Open menu",
+    menuClose: "Close menu",
+  },
   footer: { note: "© 2026 — Available for commissions worldwide" },
   theme: { dark: "☾ Dark", light: "☀ Light", ariaLabel: "Toggle colour theme" },
   home: {

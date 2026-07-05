@@ -3,7 +3,7 @@ import type { Route } from "@/lib/i18n";
 export type Dictionary = {
   meta: { title: string; description: string };
   nav: Record<Route, string>;
-  header: { role: string, name: string };
+  header: { role: string, name: string, menuOpen: string; menuClose: string };
   footer: { note: string };
   theme: { dark: string; light: string; ariaLabel: string };
   home: {

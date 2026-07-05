@@ -13,7 +13,12 @@ const bg: Dictionary = {
     "/about": "За мен",
     "/contact": "Контакти",
   },
-  header: { role: "Фотограф", name: "Иван Христов" },
+  header: {
+    role: "Фотограф",
+    name: "Иван Христов",
+    menuOpen: "Отвори менюто",
+    menuClose: "Затвори менюто",
+  },
   footer: { note: "© 2026 — На разположение за поръчки по целия свят" },
   theme: { dark: "☾ Тъмна", light: "☀ Светла", ariaLabel: "Превключване на цветовата тема" },
   home: {

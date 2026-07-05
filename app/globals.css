@@ -123,6 +123,8 @@ button { font: inherit; }
 }
 .theme-toggle:hover { color: var(--fg); border-color: var(--muted); }
 
+.header__burger { display: none; }
+
 .lang-switch { display: flex; align-items: center; gap: 2px; }
 .lang-switch__link {
   font-family: var(--font-mono), monospace; font-size: 11px; letter-spacing: 0.06em;
@@ -305,4 +307,58 @@ button { font: inherit; }
   .gallery__grid { grid-template-columns: repeat(2, 1fr); }
   .journal__item { grid-template-columns: 1fr; }
   .about__portrait { position: static; }
+}
+
+/* ============================================================
+   Phone
+   ============================================================ */
+
+@media (max-width: 640px) {
+  .container { padding-left: 20px; padding-right: 20px; }
+  .hero { padding: 56px 20px 32px; }
+  .selected { padding: 28px 20px 16px; }
+  .about-strip { padding: 44px 20px; }
+  .page { padding: 48px 20px 40px; }
+  .footer { padding: 32px 20px; }
+
+  .selected__grid, .gallery__grid { grid-template-columns: 1fr; }
+  .reel__tile { height: 260px; }
+
+  .selected__title { font-size: 24px; }
+  .about-strip__title { font-size: 22px; }
+  .journal__title { font-size: 22px; }
+
+  .contact__details { border-left: none; border-top: 1px solid var(--line); padding-left: 0; padding-top: 26px; }
+
+  /* Header collapses into a hamburger-triggered dropdown panel. */
+  .header { padding: 16px 20px; position: relative; }
+
+  .header__burger {
+    display: flex; flex-direction: column; justify-content: center; gap: 5px;
+    width: 32px; height: 32px; padding: 0; border: none; background: none; cursor: pointer;
+  }
+  .header__burger span {
+    display: block; width: 22px; height: 1.5px; background: var(--fg);
+    transition: transform 0.25s ease, opacity 0.2s ease;
+  }
+  .header__burger--open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .header__burger--open span:nth-child(2) { opacity: 0; }
+  .header__burger--open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  .nav {
+    position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; align-items: flex-start; gap: 2px;
+    background: var(--bg); border-bottom: 1px solid var(--line);
+    padding: 4px 20px 20px;
+    max-height: 0; overflow: hidden; opacity: 0; visibility: hidden;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+  }
+  .nav--open { max-height: 70vh; opacity: 1; visibility: visible; overflow-y: auto; }
+  .nav__link {
+    width: 100%; padding: 12px 0; font-size: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .nav__link--active { border-bottom-color: var(--fg); }
+  .lang-switch { margin-top: 8px; }
+  .theme-toggle { margin: 10px 0 0; }
 }

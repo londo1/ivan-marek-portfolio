@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { LOCALES, Locale, ROUTES } from "@/lib/i18n";
@@ -12,6 +13,13 @@ export default function Header({ locale, dict }: { locale: Locale; dict: Diction
   const pathname = usePathname();
   const localePrefix = `/${locale}`;
   const rest = pathname === localePrefix ? "" : pathname.slice(localePrefix.length);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // A route or locale change means navigation already happened — close the
+  // mobile menu so it doesn't stay open over the new page.
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   return (
     <header className="header">
@@ -35,7 +43,20 @@ export default function Header({ locale, dict }: { locale: Locale; dict: Diction
         </a>
       </div>
 
-      <nav className="nav">
+      <button
+        type="button"
+        className={`header__burger${menuOpen ? " header__burger--open" : ""}`}
+        aria-label={menuOpen ? dict.header.menuClose : dict.header.menuOpen}
+        aria-expanded={menuOpen}
+        aria-controls="primary-nav"
+        onClick={() => setMenuOpen((open) => !open)}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+
+      <nav id="primary-nav" className={`nav${menuOpen ? " nav--open" : ""}`}>
         {ROUTES.map((route) => {
           const href = route === "/" ? localePrefix : `${localePrefix}${route}`;
           const active = route === "/" ? pathname === localePrefix : pathname.startsWith(href);
