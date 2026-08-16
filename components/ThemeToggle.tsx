@@ -30,6 +30,11 @@ export default function ThemeToggle({ labels }: { labels: Labels }) {
     const resolved = stored
       ? normalizeTheme(stored)
       : normalizeTheme(document.documentElement.dataset.theme);
+    // The resolved theme lives in localStorage and on <html>, neither of which
+    // exists during the server render — reading them any earlier than this
+    // effect would hydrate a mismatched label. This is the
+    // sync-with-an-external-system case the rule below is meant to permit.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(resolved);
     document.documentElement.dataset.theme = resolved;
     if (!stored) window.localStorage.setItem(THEME_COOKIE, resolved);

@@ -1,5 +1,5 @@
 // Locale routing config — every page lives under app/[locale]/, with
-// middleware.ts redirecting unprefixed requests to the negotiated locale.
+// proxy.ts redirecting unprefixed requests to the negotiated locale.
 // This (rather than a cookie-only switch) is what makes each language a
 // distinct, crawlable URL that Google can index and hreflang-link together.
 

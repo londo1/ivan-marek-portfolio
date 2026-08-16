@@ -9,18 +9,18 @@ npm install
 npm run dev        # dev server, http://localhost:3000
 npm run build      # production build
 npm run start      # serve the production build
-npm run lint       # next lint (eslint-config-next, core-web-vitals)
+npm run lint       # eslint . (flat config, eslint-config-next core-web-vitals)
 npm run typecheck  # tsc --noEmit
 ```
 
-Requires Node 18.17+. **There is no test suite.** `npm run typecheck` is the
+Requires Node 20+. **There is no test suite.** `npm run typecheck` is the
 primary correctness check — always run it after editing, because the i18n
 layer encodes most of its invariants in the type system (see below) and a
 missed translation key is a compile error, not a runtime one.
 
 ## Architecture
 
-Next.js 14 App Router, TypeScript, no CSS framework — plain CSS custom
+Next.js 16 App Router, TypeScript, no CSS framework — plain CSS custom
 properties in `app/globals.css`. Every page is a Server Component. The only
 Client Components (`"use client"`) are `components/Header.tsx` and
 `components/ThemeToggle.tsx`.
@@ -31,9 +31,11 @@ Every page lives under `app/[locale]/`, and **every URL carries a locale
 segment** (`/en/gallery`, `/bg/gallery`). This is deliberate: it makes each
 language a distinct, crawlable URL rather than a cookie-only client switch.
 
-- `middleware.ts` redirects unprefixed requests to a negotiated locale —
+- `proxy.ts` redirects unprefixed requests to a negotiated locale —
   `locale` cookie → `Accept-Language` header → `DEFAULT_LOCALE`. Its matcher
   skips `_next`, `api`, `favicon.ico`, and anything with a file extension.
+  (This is the file convention formerly called `middleware.ts`; Next 16
+  renamed it, and the exported function is now `proxy`.)
 - `lib/i18n.ts` is the source of truth: `LOCALES` (`en`, `bg`),
   `DEFAULT_LOCALE` (`bg`), `ROUTES`, and `localizedPath(locale, route)`.
 - Route slugs in `ROUTES` are locale-independent by design — only the locale
@@ -127,3 +129,13 @@ labels/kickers), loaded via `next/font/google` and exposed as CSS variables
 
 The contact form (`app/[locale]/contact/page.tsx`) is presentational only —
 no Server Action or endpoint behind it.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
