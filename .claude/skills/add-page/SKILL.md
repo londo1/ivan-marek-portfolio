@@ -10,6 +10,11 @@ lives in a dictionary. A new route is therefore never just a new `page.tsx` —
 it touches five files. `ROUTES` in `lib/i18n.ts` is load-bearing; the nav, the
 sitemap, and both dictionaries derive from it.
 
+Dictionaries now hold **UI chrome only** — headings, labels, buttons, empty
+states, `metaTitle`. If the new page needs editorial prose or photographs the
+photographer will maintain, that belongs in Sanity (a field on a singleton in
+`../studio-photography`, read through `lib/data.ts`), not in a dictionary.
+
 Ask the user for the slug and the English copy if not given. **Write Bulgarian
 copy yourself** — don't leave `TODO` placeholders or copy the English through;
 `bg` is the `DEFAULT_LOCALE`, so untranslated strings are what most visitors
@@ -64,6 +69,8 @@ mandatory:
   the one step the compiler will *not* catch, and skipping it silently drops
   the page's canonical and hreflang tags.
 
+`params` is a Promise in Next 16 — both functions are `async` and must await it.
+
 ```tsx
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -71,14 +78,22 @@ import { getDictionary } from "@/lib/dictionaries";
 import { isLocale, Locale } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/seo";
 
-export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
-  if (!isLocale(params.locale)) notFound();
-  const dict = getDictionary(params.locale);
-  return pageMetadata(params.locale, "/prints", dict.prints.metaTitle, dict.prints.lead);
+export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const dict = getDictionary(locale);
+  return pageMetadata(locale, "/prints", dict.prints.metaTitle, dict.prints.lead);
 }
 
-export default function PrintsPage({ params }: { params: { locale: Locale } }) {
-  const { prints } = getDictionary(params.locale);
+export default async function PrintsPage({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params;
+  const { prints } = getDictionary(locale);
 
   return (
     <main className="page">
@@ -88,6 +103,10 @@ export default function PrintsPage({ params }: { params: { locale: Locale } }) {
   );
 }
 ```
+
+Do **not** add `generateStaticParams` — the layout reads the `theme` cookie, so
+every page is server-rendered per request and prerendering fails with
+`DYNAMIC_SERVER_USAGE`.
 
 ### 5. Styling
 

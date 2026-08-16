@@ -25,6 +25,12 @@ export function normalizeLocale(value: string | undefined | null): Locale {
   return value && isLocale(value) ? value : DEFAULT_LOCALE;
 }
 
-export function localizedPath(locale: Locale, route: Route): string {
-  return route === "/" ? `/${locale}` : `/${locale}${route}`;
+// `subPath` is for URLs that hang off a route but aren't routes themselves —
+// gallery categories, whose slugs come from the CMS (/en/gallery/portraits).
+// Keeping it a separate argument is what lets `Route` stay a closed union, so
+// `Dictionary["nav"] = Record<Route, string>` still catches a missing nav label
+// at compile time.
+export function localizedPath(locale: Locale, route: Route, subPath?: string): string {
+  const base = route === "/" ? `/${locale}` : `/${locale}${route}`;
+  return subPath ? `${base}/${subPath}` : base;
 }

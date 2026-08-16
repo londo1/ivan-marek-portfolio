@@ -1,5 +1,13 @@
 import type { Route } from "@/lib/i18n";
 
+// UI chrome only.
+//
+// Since the Sanity integration, this file holds the text the *interface* needs
+// — nav labels, buttons, form placeholders, section headings, aria-labels and
+// empty states. Editorial content (prose, photographs and their captions,
+// journal entries, contact details) lives in Sanity and arrives through
+// lib/data.ts. The split is what keeps `Dictionary["nav"]` a compile-time
+// check on `ROUTES` while still letting the photographer rewrite his own copy.
 export type Dictionary = {
   meta: { title: string; description: string };
   nav: Record<Route, string>;
@@ -13,7 +21,6 @@ export type Dictionary = {
     reelAriaLabel: string;
     selectedTitle: string;
     viewAll: string;
-    seriesCats: string[];
     aboutKicker: string;
     aboutTitle: string;
     aboutText: string;
@@ -21,31 +28,29 @@ export type Dictionary = {
   };
   about: {
     metaTitle: string;
-    name: string;
-    lead: string;
-    text: string;
     servicesHead: string;
     recognitionHead: string;
-    servicesBody: string[];
-    recognitionBody: string[];
     cta: string;
+    empty: string;
   };
   gallery: {
     metaTitle: string;
     title: string;
     sub: string;
+    /** Template filled with the real number of frames — contains "{count}". */
     count: string;
-    cmsNote: string;
+    all: string;
+    tabsAriaLabel: string;
+    empty: string;
   };
   journal: {
     metaTitle: string;
     title: string;
-    posts: { cat: string; title: string; excerpt: string; date: string }[];
+    empty: string;
   };
   contact: {
     metaTitle: string;
     title: string;
-    lead: string;
     form: {
       name: string;
       email: string;
@@ -54,6 +59,6 @@ export type Dictionary = {
       submit: string;
     };
     detailsKicker: string;
-    details: { label: string; value: string }[];
+    empty: string;
   };
 };

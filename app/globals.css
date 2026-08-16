@@ -66,6 +66,23 @@ button { font: inherit; }
 
 .mono { font-family: var(--font-mono), monospace; }
 
+/* Photographs.
+   Every tile is a fixed-shape box (square, 4:5, fixed height) holding a
+   next/image whose real proportions rarely match it, so the image fills the
+   box and crops. The crop itself is chosen upstream by Sanity's hotspot —
+   see lib/sanity/image.ts. */
+.gallery__tile,
+.selected__tile,
+.reel__tile,
+.journal__thumb,
+.about__portrait,
+.about-strip__portrait {
+  overflow: hidden;
+  background-color: var(--panel);
+}
+
+.tile__img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
 .kicker {
   font-family: var(--font-mono), monospace;
   font-size: 11px;
@@ -222,12 +239,23 @@ button { font: inherit; }
 }
 .gallery__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .gallery__tile { aspect-ratio: 1 / 1; border-radius: 2px; }
-.cms-note {
-  margin-top: 34px; padding: 20px 22px; border: 1px dashed var(--line); border-radius: 3px;
-  display: flex; align-items: center; gap: 14px;
+
+/* Category chips. Real <Link>s to real URLs — see components/CategoryTabs. */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+.tab {
+  padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px;
+  font-size: 12.5px; letter-spacing: 0.02em; color: var(--muted);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
-.cms-note__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-.cms-note__text { font-family: var(--font-mono), monospace; font-size: 12px; line-height: 1.6; color: var(--muted); }
+.tab:hover { color: var(--fg); border-color: var(--fg); }
+.tab--active { color: var(--bg); background: var(--fg); border-color: var(--fg); }
+
+/* Day one, and any category the photographer hasn't filled yet, is empty —
+   say so quietly rather than collapsing the grid to nothing. */
+.empty {
+  margin: 0; padding: 48px 0; font-family: var(--font-mono), monospace;
+  font-size: 12px; letter-spacing: 0.08em; color: var(--muted);
+}
 
 /* ============================================================
    Journal

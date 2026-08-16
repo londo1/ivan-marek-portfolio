@@ -28,14 +28,6 @@ const en: Dictionary = {
     reelAriaLabel: "Featured photographs",
     selectedTitle: "Selected series",
     viewAll: "View all →",
-    seriesCats: [
-      "Portraiture",
-      "Landscape",
-      "Still life",
-      "Interiors",
-      "Street",
-      "Travel",
-    ],
     aboutKicker: "About",
     aboutTitle:
       "Ivan is a photographer working across editorial, portrait and personal projects.",
@@ -45,55 +37,28 @@ const en: Dictionary = {
   },
   about: {
     metaTitle: "About — Ivan Hristov",
-    name: "Ivan Hristov",
-    lead: "I'm a photographer with a mixed practice — portraits, landscapes and quiet still life. I care about honest light and the small moments most people walk past.",
-    text: "My work has appeared in editorial and commercial projects, and I take on a limited number of commissions each year so every shoot gets full attention.",
     servicesHead: "Services",
     recognitionHead: "Recognition",
-    servicesBody: ["Editorial · Portrait", "Commercial · Travel", "Fine-art prints"],
-    recognitionBody: [
-      "Feature — Frame Journal",
-      "Shortlist — LensPrize 25",
-      "Group show — Atrium",
-    ],
     cta: "Get in touch",
+    empty: "This page hasn't been written yet.",
   },
   gallery: {
     metaTitle: "Gallery — Ivan Hristov",
     title: "Gallery",
     sub: "The complete archive, updated as new frames are made.",
-    count: "120+ frames",
-    cmsNote:
-      "CMS-ready — new photographs added here automatically as they're uploaded to the studio library. No redeploy needed.",
+    count: "{count} frames",
+    all: "All",
+    tabsAriaLabel: "Gallery categories",
+    empty: "No photographs here yet.",
   },
   journal: {
     metaTitle: "Journal — Ivan Hristov",
     title: "Journal",
-    posts: [
-      {
-        cat: "Field notes",
-        title: "On shooting in flat winter light",
-        excerpt: "Why the greyest days often make the most honest portraits.",
-        date: "12 · 2025",
-      },
-      {
-        cat: "Gear",
-        title: "One lens for a whole trip",
-        excerpt: "Packing light forces better decisions in the moment.",
-        date: "09 · 2025",
-      },
-      {
-        cat: "Process",
-        title: "How I sequence a series",
-        excerpt: "Editing down from four hundred frames to twelve.",
-        date: "06 · 2025",
-      },
-    ],
+    empty: "No journal entries yet.",
   },
   contact: {
     metaTitle: "Contact — Ivan Hristov",
     title: "Let's work together",
-    lead: "Tell me a little about the project and I'll get back to you within a couple of days.",
     form: {
       name: "Your name",
       email: "Email address",
@@ -102,12 +67,7 @@ const en: Dictionary = {
       submit: "Send inquiry",
     },
     detailsKicker: "Studio",
-    details: [
-      { label: "Email", value: "studio@ivanmarek.photo" },
-      { label: "Based in", value: "Sofia — working worldwide" },
-      { label: "Instagram", value: "@ivan94hr" },
-      { label: "Availability", value: "Booking Q3–Q4 2026" },
-    ],
+    empty: "Contact details are on their way.",
   },
 };
 

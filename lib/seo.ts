@@ -5,23 +5,27 @@ import { DEFAULT_LOCALE, LOCALES, Locale, Route, SITE_URL, localizedPath } from 
 // locale, plus an hreflang entry per locale and an x-default fallback — the
 // three signals search engines need to index and cross-link the language
 // versions instead of treating them as duplicate content.
+// `subPath` covers CMS-driven URLs under a route (gallery categories); the
+// slug is locale-independent, so the alternates are built exactly the same way
+// as for a static route.
 export function pageMetadata(
   locale: Locale,
   route: Route,
   title: string,
-  description?: string
+  description?: string,
+  subPath?: string
 ): Metadata {
   const languages: Record<string, string> = {};
   for (const l of LOCALES) {
-    languages[l] = `${SITE_URL}${localizedPath(l, route)}`;
+    languages[l] = `${SITE_URL}${localizedPath(l, route, subPath)}`;
   }
-  languages["x-default"] = `${SITE_URL}${localizedPath(DEFAULT_LOCALE, route)}`;
+  languages["x-default"] = `${SITE_URL}${localizedPath(DEFAULT_LOCALE, route, subPath)}`;
 
   return {
     title,
     ...(description ? { description } : {}),
     alternates: {
-      canonical: `${SITE_URL}${localizedPath(locale, route)}`,
+      canonical: `${SITE_URL}${localizedPath(locale, route, subPath)}`,
       languages,
     },
   };
