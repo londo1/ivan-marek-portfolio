@@ -32,11 +32,14 @@ export async function POST(req: NextRequest) {
       return new NextResponse("Bad request: no _type in payload", { status: 400 });
     }
 
-    // "max" is stale-while-revalidate: the next visitor may see the previous
-    // version for the length of one background fetch, and everyone after that
-    // sees the new one. The single-argument form that expired immediately is
-    // deprecated in Next 16.
-    revalidateTag(body._type, "max");
+    // `{ expire: 0 }`, not "max". Next's recommended "max" profile is
+    // stale-while-revalidate: the first visitor after a publish still gets the
+    // old page while the new one is fetched behind them, which reads as "my
+    // photo didn't show up". The docs single out webhooks from external
+    // systems as the case for immediate expiry — the next request blocks on a
+    // fresh fetch instead. (The one-argument form does the same thing but is
+    // deprecated in Next 16.)
+    revalidateTag(body._type, { expire: 0 });
 
     return NextResponse.json({ revalidated: true, tag: body._type, now: Date.now() });
   } catch (error) {

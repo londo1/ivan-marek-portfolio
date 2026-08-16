@@ -149,9 +149,15 @@ a helper interpolating into the query template would cost the generated types.
 
 **Revalidation.** Each fetch is tagged with the document types it reads;
 `app/api/revalidate/route.ts` verifies the Sanity webhook and calls
-`revalidateTag(_type, "max")`, so publishing goes live in seconds without a
-redeploy. `export const revalidate = 3600` on each page is the fallback if a
-webhook is ever missed.
+`revalidateTag(_type, { expire: 0 })`, so publishing goes live in seconds
+without a redeploy. `export const revalidate = 3600` on each page is the
+fallback if a webhook is ever missed.
+
+Use `{ expire: 0 }`, not Next's recommended `"max"` profile, for this webhook.
+`"max"` is stale-while-revalidate — the first visitor after a publish gets the
+previous version, which reads as "my photo didn't appear". The Next docs name
+webhooks from external systems as the exception where immediate expiry is
+correct.
 
 **Everything is server-rendered per request**, not prerendered: the layout
 reads the `theme` cookie (see SSR theme switching), which rules out static
