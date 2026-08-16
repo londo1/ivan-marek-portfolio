@@ -32,9 +32,14 @@ export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
 
-export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
-  if (!isLocale(params.locale)) notFound();
-  const dict = getDictionary(params.locale);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const dict = getDictionary(locale);
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -43,21 +48,22 @@ export function generateMetadata({ params }: { params: { locale: string } }): Me
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  if (!isLocale(params.locale)) notFound();
-  const locale: Locale = params.locale;
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale: Locale = rawLocale;
   const dict = getDictionary(locale);
 
   // SSR theming: the active theme is read from the cookie on the server and
   // written to <html data-theme>, so the correct palette is present in the
   // very first HTML response — no flash of the wrong theme.
-  const theme = normalizeTheme(cookies().get(THEME_COOKIE)?.value);
+  const theme = normalizeTheme((await cookies()).get(THEME_COOKIE)?.value);
 
   return (
     <html

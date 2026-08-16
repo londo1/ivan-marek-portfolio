@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { LOCALES, Locale, ROUTES } from "@/lib/i18n";
@@ -16,10 +16,15 @@ export default function Header({ locale, dict }: { locale: Locale; dict: Diction
   const [menuOpen, setMenuOpen] = useState(false);
 
   // A route or locale change means navigation already happened — close the
-  // mobile menu so it doesn't stay open over the new page.
-  useEffect(() => {
+  // mobile menu so it doesn't stay open over the new page. Adjusting state
+  // during render rather than in an effect is React's documented way to reset
+  // state on a changed input: it settles before the browser paints, so the menu
+  // never flashes open on the new page.
+  const [lastPathname, setLastPathname] = useState(pathname);
+  if (lastPathname !== pathname) {
+    setLastPathname(pathname);
     setMenuOpen(false);
-  }, [pathname]);
+  }
 
   return (
     <header className="header">

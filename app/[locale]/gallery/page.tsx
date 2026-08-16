@@ -5,14 +5,20 @@ import { getDictionary } from "@/lib/dictionaries";
 import { isLocale, Locale } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/seo";
 
-export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
-  if (!isLocale(params.locale)) notFound();
-  const dict = getDictionary(params.locale);
-  return pageMetadata(params.locale, "/gallery", dict.gallery.metaTitle, dict.gallery.sub);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const dict = getDictionary(locale);
+  return pageMetadata(locale, "/gallery", dict.gallery.metaTitle, dict.gallery.sub);
 }
 
-export default function GalleryPage({ params }: { params: { locale: Locale } }) {
-  const { gallery } = getDictionary(params.locale);
+export default async function GalleryPage({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params;
+  const { gallery } = getDictionary(locale);
 
   return (
     <main className="page">

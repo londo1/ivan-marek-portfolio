@@ -5,14 +5,20 @@ import { getDictionary } from "@/lib/dictionaries";
 import { isLocale, Locale } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/seo";
 
-export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
-  if (!isLocale(params.locale)) notFound();
-  const dict = getDictionary(params.locale);
-  return pageMetadata(params.locale, "/about", dict.about.metaTitle, dict.about.lead);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const dict = getDictionary(locale);
+  return pageMetadata(locale, "/about", dict.about.metaTitle, dict.about.lead);
 }
 
-export default function AboutPage({ params }: { params: { locale: Locale } }) {
-  const { about } = getDictionary(params.locale);
+export default async function AboutPage({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params;
+  const { about } = getDictionary(locale);
 
   return (
     <main className="page">
@@ -42,7 +48,7 @@ export default function AboutPage({ params }: { params: { locale: Locale } }) {
               ))}
             </div>
           </div>
-          <Link href={`/${params.locale}/contact`} className="cta">
+          <Link href={`/${locale}/contact`} className="cta">
             {about.cta}
           </Link>
         </div>

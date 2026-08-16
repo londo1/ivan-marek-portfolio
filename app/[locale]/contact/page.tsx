@@ -4,14 +4,20 @@ import { getDictionary } from "@/lib/dictionaries";
 import { isLocale, Locale } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/seo";
 
-export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
-  if (!isLocale(params.locale)) notFound();
-  const dict = getDictionary(params.locale);
-  return pageMetadata(params.locale, "/contact", dict.contact.metaTitle, dict.contact.lead);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  const dict = getDictionary(locale);
+  return pageMetadata(locale, "/contact", dict.contact.metaTitle, dict.contact.lead);
 }
 
-export default function ContactPage({ params }: { params: { locale: Locale } }) {
-  const { contact } = getDictionary(params.locale);
+export default async function ContactPage({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = await params;
+  const { contact } = getDictionary(locale);
 
   return (
     <main className="page">
